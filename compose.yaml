@@ -1,0 +1,18 @@
+services:
+  source:
+    build: .
+    ports:
+      - "8730:8730"
+    environment:
+      XV_TOKEN: ${XV_TOKEN:?set XV_TOKEN}
+      XV_PORT: "8730"
+      XV_DATA_DIR: /data
+      XV_CACHE_MAX_MB: "512"
+      XV_CACHE_GC_SECONDS: "300"
+      XV_HOME_TIMELINE: "false"
+    volumes:
+      - xviewer-data:/data
+    restart: always
+
+volumes:
+  xviewer-data:
