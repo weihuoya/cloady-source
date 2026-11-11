@@ -517,6 +517,8 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(body)
 
     def _json(self, obj, status: int=200):
+        if status == 404:
+            return self._send(404, b'')
         self._send(status, json.dumps(obj, ensure_ascii=False).encode(), 'application/json; charset=utf-8')
 
     def log_message(self, fmt, *args):
@@ -556,7 +558,7 @@ class Handler(BaseHTTPRequestHandler):
             if path.startswith('/api/tweet/'):
                 tw = self.app.store.get(path.rsplit('/', 1)[-1])
                 return self._json({'item': tw}) if tw else self._json({'error': 'not found'}, 404)
-            return self._send(404, b'not found')
+            return self._send(404, b'')
         except BadRequest as exc:
             try:
                 self._json({'error': str(exc)}, 400)
